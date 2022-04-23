@@ -11,7 +11,7 @@ struct BallData
 {
 	vec2 position;
 	vec3 colour;
-	vec2 scale;
+	float scale;
 	bool is_active;
 };
 
@@ -21,6 +21,9 @@ resource(id = 0) buffer BallBuffer
 } balls;
 
 output(id = 0) vec3 colour;
+output(id = 1) vec2 centre;
+output(id = 2) float size;
+output(id = 3) vec2 position_clipspace;
 
 void main()
 {
@@ -28,7 +31,7 @@ void main()
 	uint ball_vertex_id = tz_VertexID % 3;
 
 	vec2 triangle_pos = positions[ball_vertex_id];
-	vec2 clipspace_pos = balls.data[ball_index].position + (triangle_pos * balls.data[ball_index].scale);
+	vec2 clipspace_pos = balls.data[ball_index].position + triangle_pos;
 	if(!balls.data[ball_index].is_active)
 	{
 		gl_Position = vec4(0, 0, 0, 1);
@@ -37,5 +40,8 @@ void main()
 	{
 		gl_Position = vec4(clipspace_pos, 0.0, 1.0);
 	}
+	position_clipspace = gl_Position.xy;
 	colour = balls.data[ball_index].colour;
+	centre = balls.data[ball_index].position;
+	size = balls.data[ball_index].scale;
 }

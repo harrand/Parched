@@ -42,14 +42,15 @@ namespace game
 		this->renderer.render(this->ball_capacity());
 	}
 
-	void RenderState::add_ball(tz::Vec2 position, tz::Vec3 colour, tz::Vec2 scale)
+	void RenderState::add_ball(tz::Vec2 position, tz::Vec3 colour, float radius)
 	{
 		auto& ball = this->renderer.get_resource(this->ball_data)->data_as<BallState>()[this->num_balls];
 		ball.position = position;
 		ball.colour = colour;
-		ball.scale = scale;
+		ball.scale = radius;
 		ball.is_active = true;
 		this->num_balls++;
+		tz_assert(this->num_balls < this->ball_capacity(), "Buffer resource ran out of space, too many balls at once. TODO: Resize the buffer.");
 	}
 
 	tz::gl::Renderer RenderState::make_renderer()
@@ -62,7 +63,7 @@ namespace game
 		{
 			.position = {0.0f, 0.0f},
 			.colour = {1.0f, 0.0f, 0.0f},
-			.scale = {1.0f, 1.0f},
+			.scale = 1.0f,
 			.is_active = false
 		};
 
