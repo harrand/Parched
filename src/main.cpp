@@ -9,7 +9,7 @@ int main()
 	});
 	{
 		game::RenderState render;
-		render.add_ball({0.0f, 0.0f}, {0.5f, 0.0f, 1.0f}, 0.05f);
+		render.add_ball({0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, 0.5f);
 		while(!tz::window().is_close_requested())
 		{
 			tz::window().update();
