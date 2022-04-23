@@ -61,6 +61,7 @@ namespace game
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(parched, vertex));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(parched, fragment));
 		rinfo.set_options({tz::gl::RendererOption::NoDepthTesting});
+		rinfo.set_clear_colour({0.64f, 0.55f, 0.49f, 1.0f});
 
 		constexpr BallState default_ball
 		{

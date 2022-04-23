@@ -32,14 +32,9 @@ void main()
 
 	vec2 triangle_pos = positions[ball_vertex_id];
 	vec2 clipspace_pos = balls.data[ball_index].position + triangle_pos;
-	if(!balls.data[ball_index].is_active)
-	{
-		gl_Position = vec4(0, 0, 0, 1);
-	}
-	else
-	{
-		gl_Position = vec4(clipspace_pos, 0.0, 1.0);
-	}
+
+	gl_Position = vec4(clipspace_pos * float(balls.data[ball_index].is_active), 0.0, 1.0);
+
 	position_clipspace = gl_Position.xy;
 	colour = balls.data[ball_index].colour;
 	centre = balls.data[ball_index].position;
