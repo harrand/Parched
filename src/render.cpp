@@ -10,6 +10,7 @@ namespace game
 	RenderState::RenderState():
 	device(),
 	ball_data(tz::nullhand),
+	meta_data(tz::nullhand),
 	renderer(this->make_renderer())
 	{
 		tz_assert(this->ball_capacity() == detail::initial_buf_size, "RenderState had unexpected initial ball capacity. Expected %zu, got %zu", detail::initial_buf_size, this->ball_capacity());
@@ -38,6 +39,7 @@ namespace game
 
 	void RenderState::update()
 	{
+		this->renderer.get_resource(this->meta_data)->data_as<Metadata>().front().aspect_ratio = tz::window().get_width() / tz::window().get_height();
 		// Assume each ball is 1 triangle.
 		this->renderer.render(this->ball_capacity());
 	}
@@ -76,6 +78,13 @@ namespace game
 			tz::gl::ResourceAccess::DynamicVariable
 		);
 		this->ball_data = rinfo.add_resource(ball_buf);
+
+		tz::gl::BufferResource meta_buf = tz::gl::BufferResource::from_one
+		(
+			Metadata{},
+			tz::gl::ResourceAccess::DynamicFixed
+		);
+		this->meta_data = rinfo.add_resource(meta_buf);
 		return this->device.create_renderer(rinfo);
 	}
 }

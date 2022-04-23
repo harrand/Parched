@@ -11,6 +11,11 @@ namespace game
 		constexpr std::size_t initial_buf_size = 8096;
 	}
 
+	struct Metadata
+	{
+		float aspect_ratio;
+	};
+
 	struct BallState
 	{
 		tz::Vec2 position;
@@ -36,6 +41,7 @@ namespace game
 
 		tz::gl::Device device;
 		tz::gl::ResourceHandle ball_data;
+		tz::gl::ResourceHandle meta_data;
 		tz::gl::Renderer renderer;
 		std::size_t num_balls = 0;
 	};
