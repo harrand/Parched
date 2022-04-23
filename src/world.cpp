@@ -65,5 +65,28 @@ namespace game
 		{
 			this->apply_acceleration(i, gravity);
 		}
+		this->apply_constraint();
+	}
+
+	void World::apply_constraint()
+	{
+		if(this->render.ball_count() == 0)
+		{
+			return;	
+		}
+
+		const tz::Vec2& arena_position = this->render.get_balls().front().position;
+		const float arena_radius = this->render.get_balls().front().scale;
+		for(std::size_t i = 0; i < this->render.ball_count(); i++)
+		{
+			const tz::Vec2 to_obj = this->render.get_balls()[i].position - arena_position;
+			const float dist = to_obj.length();
+			const float ball_radius = this->render.get_balls()[i].scale;
+			if(dist > arena_radius - ball_radius)
+			{
+				const tz::Vec2 n = to_obj / dist;
+				this->render.get_balls()[i].position = arena_position + n * (arena_radius - ball_radius);
+			}
+		}
 	}
 }

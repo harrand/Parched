@@ -23,6 +23,7 @@ namespace game
 	private:
 		void motion_integration();
 		void solve_physics();
+		void apply_constraint();
 
 		RenderState render;
 		std::vector<MotionData> motion;
