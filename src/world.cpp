@@ -1,4 +1,5 @@
 #include "world.hpp"
+#include "core/profiling/zone.hpp"
 
 namespace game
 {
@@ -13,6 +14,7 @@ namespace game
 
 	void World::add_ball(tz::Vec2 position, tz::Vec3 colour, float radius)
 	{
+		TZ_PROFZONE("World - Add Ball", TZ_PROFCOL_GREEN);
 		std::size_t id = this->render.ball_count();
 		this->render.add_ball(position, colour, radius);
 		this->motion.push_back
@@ -30,6 +32,7 @@ namespace game
 
 	void World::update()
 	{
+		TZ_PROFZONE("World Update", TZ_PROFCOL_GREEN);
 		tz::Duration now = tz::system_time();
 		const float dt = (now - this->time).seconds<float>();
 
@@ -39,6 +42,7 @@ namespace game
 		const float subdt = dt / static_cast<float>(sub_steps);
 		for(std::size_t i = 0; i < sub_steps; i++)
 		{
+			TZ_PROFZONE("World Update Substep", TZ_PROFCOL_BROWN);
 			this->solve_physics();
 			this->motion_integration(subdt);
 		}
@@ -51,6 +55,7 @@ namespace game
 
 	void World::motion_integration(float dt)
 	{
+		TZ_PROFZONE("World Motion Integration", TZ_PROFCOL_GREEN);
 		// Verlet integrate.
 		for(std::size_t i = 1; i < this->render.ball_count(); i++)
 		{
@@ -70,6 +75,7 @@ namespace game
 
 	void World::solve_physics()
 	{
+		TZ_PROFZONE("World Solve Physics", TZ_PROFCOL_GREEN);
 		constexpr tz::Vec2 gravity{0.0f, -3.0f};
 		for(std::size_t i = 1; i < this->render.ball_count(); i++)
 		{
@@ -81,6 +87,7 @@ namespace game
 
 	void World::apply_constraint()
 	{
+		TZ_PROFZONE("World Apply Constraint", TZ_PROFCOL_GREEN);
 		if(this->render.ball_count() == 0)
 		{
 			return;	
@@ -103,6 +110,7 @@ namespace game
 
 	void World::solve_collisions()
 	{
+		TZ_PROFZONE("World Solve Collisions", TZ_PROFCOL_BROWN);
 		auto get_pos = [this](std::size_t ball_id)->tz::Vec2&{return this->render.get_balls()[ball_id].position;};
 		for(std::size_t i = 1; i < this->render.ball_count(); i++)
 		{

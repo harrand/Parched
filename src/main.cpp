@@ -1,4 +1,5 @@
 #include "core/tz.hpp"
+#include "core/profiling/zone.hpp"
 #include "world.hpp"
 #include <random>
 #include <limits>
@@ -30,6 +31,7 @@ int main()
 
 void game_advance(game::World& world, std::default_random_engine& rand)
 {
+	TZ_FRAME_BEGIN;
 	using namespace tz::literals;
 	static tz::Delay fixed_update{17_ms};
 	tz::window().update();
@@ -53,4 +55,5 @@ void game_advance(game::World& world, std::default_random_engine& rand)
 			world.add_ball(bpos, random_colour, 0.03f);
 		}
 	}
+	TZ_FRAME_END;
 }
