@@ -65,6 +65,11 @@ namespace game
 		this->num_balls--;
 	}
 
+	void RenderState::swap_balls(std::size_t a, std::size_t b)
+	{
+		std::swap(this->get_balls()[a], this->get_balls()[b]);
+	}
+
 	tz::gl::Renderer RenderState::make_renderer()
 	{
 		tz::gl::RendererInfo rinfo;

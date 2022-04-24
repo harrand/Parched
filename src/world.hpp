@@ -21,7 +21,9 @@ namespace game
 		World();
 		void add_ball(tz::Vec2 position, tz::Vec3 colour, float radius, BallInfo info = BallTypeInfo<BallType::Normal>{});
 		void pop_ball();
+		void erase_ball(std::size_t ball_id);
 		void apply_acceleration(std::size_t ball_id, tz::Vec2 acceleration);
+		const tz::Vec3& get_ball_colour(std::size_t ball_id) const;
 		void set_ball_colour(std::size_t ball_id, tz::Vec3 colour);
 		BallType get_type(std::size_t ball_id) const;
 		void update();

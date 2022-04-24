@@ -43,6 +43,21 @@ void game_advance(game::World& world, std::default_random_engine& rand)
 		world.set_ball_colour(ball_idx, tz::Vec3{0.0f, 0.0f, 1.0f});
 	});
 
+	game::BallTypeInfo<game::BallType::Trigger> purge_trigger;
+	purge_trigger.on_enter.add_callback([&world](std::size_t ball_idx)
+	{
+		if(world.get_type(ball_idx) == game::BallType::Normal)
+		{
+			world.erase_ball(ball_idx);
+		}
+	});
+
+	game::BallTypeInfo<game::BallType::Selective> not_blue;
+	not_blue.filter = [&world](std::size_t ball_idx)->bool
+	{
+		return world.get_ball_colour(ball_idx)[2] > 0.9f && world.get_type(ball_idx) == game::BallType::Normal;
+	};
+
 	if(fixed_update.done())
 	{
 		fixed_update.reset();
@@ -78,7 +93,7 @@ void game_advance(game::World& world, std::default_random_engine& rand)
 			bpos[1] /= tz::window().get_height() * -0.5f;
 			bpos[1] += 1.0f;
 
-			world.add_ball(bpos, tz::Vec3{0.0f, 0.0f, 1.0f}, 0.3f, blue_trigger);
+			world.add_ball(bpos, tz::Vec3{0.0f, 0.0f, 1.0f}, 0.1f, purge_trigger);
 		}
 	}
 	TZ_FRAME_END;

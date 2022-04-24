@@ -37,6 +37,7 @@ namespace game
 		void update();
 		void add_ball(tz::Vec2 position, tz::Vec3 colour, float radius = 1.0);
 		void pop_ball();
+		void swap_balls(std::size_t a, std::size_t b);
 	private:
 		tz::gl::Renderer make_renderer();
 

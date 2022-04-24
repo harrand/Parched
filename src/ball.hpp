@@ -8,7 +8,8 @@ namespace game
 	{
 		Normal,
 		Constraint,
-		Trigger
+		Trigger,
+		Selective
 	};
 
 	template<BallType T>
@@ -25,7 +26,14 @@ namespace game
 		tz::Callback<std::size_t> on_exit;
 	};
 
-	using BallInfo = std::variant<BallTypeInfo<BallType::Normal>, BallTypeInfo<BallType::Constraint>, BallTypeInfo<BallType::Trigger>>;
+	template<>
+	struct BallTypeInfo<BallType::Selective>
+	{
+		constexpr BallType get_type() const{return BallType::Selective;}
+		std::function<bool(std::size_t)> filter;
+	};
+
+	using BallInfo = std::variant<BallTypeInfo<BallType::Normal>, BallTypeInfo<BallType::Constraint>, BallTypeInfo<BallType::Trigger>, BallTypeInfo<BallType::Selective>>;
 }
 
 #endif // PARCHED_BALL_HPP

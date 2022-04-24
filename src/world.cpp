@@ -36,10 +36,32 @@ namespace game
 		this->render.pop_ball();
 	}
 
+	void World::erase_ball(std::size_t ball_id)
+	{
+		if(ball_id == this->ball_count() - 1)
+		{
+			this->pop_ball();
+			return;
+		}
+		// Swap this ball with the last ball.
+		std::size_t last_ball_id = this->ball_count() - 1;
+		this->render.swap_balls(ball_id, last_ball_id);
+		std::swap(this->motion[ball_id], this->motion[last_ball_id]);
+		this->motion[ball_id].ball_id = ball_id;
+		this->motion[last_ball_id].ball_id = last_ball_id;
+
+		this->pop_ball();
+	}
+
 	void World::apply_acceleration(std::size_t ball_id, tz::Vec2 acceleration)
 	{
 		tz_assert(this->render.ball_count() > ball_id, "Ball ID %zu is invalid. There are only %zu balls in the world.", ball_id, this->render.ball_count());
 		this->motion[ball_id].acceleration += acceleration;
+	}
+
+	const tz::Vec3& World::get_ball_colour(std::size_t ball_id) const
+	{
+		return this->render.get_balls()[ball_id].colour;
 	}
 
 	void World::set_ball_colour(std::size_t ball_id, tz::Vec3 colour)
@@ -192,10 +214,29 @@ namespace game
 					}
 					else
 					{
+
 						const tz::Vec2 n = collision_axis / dist;
 						const float delta = radius - dist;
-						get_pos(i) += n * 0.4f * delta;
-						get_pos(j) -= n * 0.4f * delta;
+
+						if(this->get_type(i) == BallType::Selective)
+						{
+							if(std::get<BallTypeInfo<BallType::Selective>>(this->motion[i].info).filter(j))
+							{
+								get_pos(j) -= n * 0.4f * delta;
+							}
+						}
+						else if(this->get_type(j) == BallType::Selective)
+						{
+							if(std::get<BallTypeInfo<BallType::Selective>>(this->motion[j].info).filter(i))
+							{
+								get_pos(i) += n * 0.4f * delta;
+							}
+						}
+						else
+						{
+							get_pos(i) += n * 0.4f * delta;
+							get_pos(j) -= n * 0.4f * delta;
+						}
 					}
 				}
 			}
