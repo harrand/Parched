@@ -55,6 +55,16 @@ namespace game
 		tz_assert(this->num_balls < this->ball_capacity(), "Buffer resource ran out of space, too many balls at once. TODO: Resize the buffer.");
 	}
 
+	void RenderState::pop_ball()
+	{
+		if(this->num_balls <= 1)
+		{
+			return;
+		}
+		this->get_balls().back().is_active = false;
+		this->num_balls--;
+	}
+
 	tz::gl::Renderer RenderState::make_renderer()
 	{
 		tz::gl::RendererInfo rinfo;

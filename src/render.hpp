@@ -36,6 +36,7 @@ namespace game
 		std::span<BallState> get_balls();
 		void update();
 		void add_ball(tz::Vec2 position, tz::Vec3 colour, float radius = 1.0);
+		void pop_ball();
 	private:
 		tz::gl::Renderer make_renderer();
 

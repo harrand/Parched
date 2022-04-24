@@ -3,6 +3,7 @@ add_subdirectory(engine)
 add_app(
 	TARGET Parched
 	SOURCE_FILES
+		src/ball.hpp
 		src/main.cpp
 		src/render.cpp
 		src/render.hpp
