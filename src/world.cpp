@@ -35,12 +35,12 @@ namespace game
 
 		this->time = now;
 
-		static constexpr std::size_t sub_steps = 3;
-		const float subdt = dt / sub_steps;
+		static constexpr std::size_t sub_steps = 2;
+		const float subdt = dt / static_cast<float>(sub_steps);
 		for(std::size_t i = 0; i < sub_steps; i++)
 		{
-			this->motion_integration(subdt);
 			this->solve_physics();
+			this->motion_integration(subdt);
 		}
 	}
 
@@ -56,7 +56,7 @@ namespace game
 		{
 			tz::Vec2& position_current = this->render.get_balls()[i].position;
 			tz::Vec2& position_old = this->motion[i].position_old;
-			tz::Vec2 acceleration = this->motion[i].acceleration;
+			tz::Vec2& acceleration = this->motion[i].acceleration;
 
 			const tz::Vec2 velocity = position_current - position_old;
 			// Save current position.
@@ -70,7 +70,7 @@ namespace game
 
 	void World::solve_physics()
 	{
-		constexpr tz::Vec2 gravity{0.0f, -0.1f};
+		constexpr tz::Vec2 gravity{0.0f, -3.0f};
 		for(std::size_t i = 1; i < this->render.ball_count(); i++)
 		{
 			this->apply_acceleration(i, gravity);
@@ -106,7 +106,7 @@ namespace game
 		auto get_pos = [this](std::size_t ball_id)->tz::Vec2&{return this->render.get_balls()[ball_id].position;};
 		for(std::size_t i = 1; i < this->render.ball_count(); i++)
 		{
-			for(std::size_t j = 1; j < this->render.ball_count(); j++)
+			for(std::size_t j = i+1; j < this->render.ball_count(); j++)
 			{
 				if(i == j)
 				{
