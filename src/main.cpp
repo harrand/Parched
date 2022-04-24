@@ -34,7 +34,7 @@ int main()
 					bpos[1] += 1.0f;
 					tz::Vec3 random_colour{0.0f, 0.0f, 0.0f};
 					std::generate(random_colour.data().begin(), random_colour.data().end(), [&rand]()->float{return static_cast<float>(rand()) / std::numeric_limits<std::default_random_engine::result_type>::max() * 2.0f;});
-					world.add_ball(bpos, random_colour, 0.1f);
+					world.add_ball(bpos, random_colour, 0.03f);
 				}
 			}
 		}

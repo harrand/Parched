@@ -30,8 +30,18 @@ namespace game
 
 	void World::update()
 	{
-		this->motion_integration();
-		this->solve_physics();
+		tz::Duration now = tz::system_time();
+		const float dt = (now - this->time).seconds<float>();
+
+		this->time = now;
+
+		static constexpr std::size_t sub_steps = 3;
+		const float subdt = dt / sub_steps;
+		for(std::size_t i = 0; i < sub_steps; i++)
+		{
+			this->motion_integration(subdt);
+			this->solve_physics();
+		}
 	}
 
 	void World::draw()
@@ -39,13 +49,8 @@ namespace game
 		this->render.update();
 	}
 
-	void World::motion_integration()
+	void World::motion_integration(float dt)
 	{
-		tz::Duration now = tz::system_time();
-		const float dt = (now - this->time).seconds<float>();
-
-		this->time = now;
-		
 		// Verlet integrate.
 		for(std::size_t i = 1; i < this->render.ball_count(); i++)
 		{
@@ -71,6 +76,7 @@ namespace game
 			this->apply_acceleration(i, gravity);
 		}
 		this->apply_constraint();
+		this->solve_collisions();
 	}
 
 	void World::apply_constraint()
@@ -91,6 +97,33 @@ namespace game
 			{
 				const tz::Vec2 n = to_obj / dist;
 				this->render.get_balls()[i].position = arena_position + n * (arena_radius - ball_radius);
+			}
+		}
+	}
+
+	void World::solve_collisions()
+	{
+		auto get_pos = [this](std::size_t ball_id)->tz::Vec2&{return this->render.get_balls()[ball_id].position;};
+		for(std::size_t i = 1; i < this->render.ball_count(); i++)
+		{
+			for(std::size_t j = 1; j < this->render.ball_count(); j++)
+			{
+				if(i == j)
+				{
+					continue;
+				}
+
+				// Balls may be of different size. We get the max.
+				const float radius = this->render.get_balls()[i].scale + this->render.get_balls()[j].scale;
+				tz::Vec2 collision_axis = get_pos(i) - get_pos(j);
+				const float dist = collision_axis.length();
+				if(dist < radius)
+				{
+					const tz::Vec2 n = collision_axis / dist;
+					const float delta = radius - dist;
+					get_pos(i) += n * 0.5f * delta;
+					get_pos(j) -= n * 0.5f * delta;
+				}
 			}
 		}
 	}

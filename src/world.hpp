@@ -22,9 +22,10 @@ namespace game
 		void update();
 		void draw();
 	private:
-		void motion_integration();
+		void motion_integration(float dt);
 		void solve_physics();
 		void apply_constraint();
+		void solve_collisions();
 
 		RenderState render;
 		std::vector<MotionData> motion;
