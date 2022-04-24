@@ -20,6 +20,7 @@ namespace game
 		void add_ball(tz::Vec2 position, tz::Vec3 colour, float radius);
 		void apply_acceleration(std::size_t ball_id, tz::Vec2 acceleration);
 		void update();
+		void draw();
 	private:
 		void motion_integration();
 		void solve_physics();

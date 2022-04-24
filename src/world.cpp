@@ -18,7 +18,7 @@ namespace game
 		this->motion.push_back
 		({
 			.ball_id = id,
-			.position_old = position
+			.position_old = position,
 		});
 	}
 
@@ -30,15 +30,20 @@ namespace game
 
 	void World::update()
 	{
-		this->render.update();
 		this->motion_integration();
 		this->solve_physics();
+	}
+
+	void World::draw()
+	{
+		this->render.update();
 	}
 
 	void World::motion_integration()
 	{
 		tz::Duration now = tz::system_time();
-		float dt = (now - this->time).seconds<float>();
+		const float dt = (now - this->time).seconds<float>();
+
 		this->time = now;
 		
 		// Verlet integrate.
@@ -52,7 +57,7 @@ namespace game
 			// Save current position.
 			position_old = position_current;
 			// Do verlet.
-			position_current = position_current + velocity + acceleration + dt * dt;
+			position_current = position_current + velocity + acceleration * dt * dt;
 			// Reset acceleration.
 			acceleration = {0.0f, 0.0f};
 		}
@@ -60,7 +65,7 @@ namespace game
 
 	void World::solve_physics()
 	{
-		constexpr tz::Vec2 gravity{0.0f, -0.000001f};
+		constexpr tz::Vec2 gravity{0.0f, -0.1f};
 		for(std::size_t i = 1; i < this->render.ball_count(); i++)
 		{
 			this->apply_acceleration(i, gravity);
