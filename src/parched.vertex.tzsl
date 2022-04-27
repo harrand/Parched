@@ -32,16 +32,16 @@ output(id = 3) vec2 position_clipspace;
 
 void main()
 {
-	uint ball_index = tz_VertexID / 3;
-	uint ball_vertex_id = tz_VertexID % 3;
+	uint ball_index = in::vertex_id / 3;
+	uint ball_vertex_id = in::vertex_id % 3;
 
 	vec2 triangle_pos = positions[ball_vertex_id];
 	vec2 clipspace_pos = balls.data[ball_index].position + triangle_pos;
 	clipspace_pos.x /= metadata.aspect_ratio;
 
-	gl_Position = vec4(clipspace_pos * float(balls.data[ball_index].is_active), 0.0, 1.0);
+	out::position = vec4(clipspace_pos * float(balls.data[ball_index].is_active), 0.0, 1.0);
 
-	position_clipspace = gl_Position.xy;
+	position_clipspace = out::position.xy;
 	colour = balls.data[ball_index].colour;
 	centre = balls.data[ball_index].position;
 	centre.x /= metadata.aspect_ratio;
