@@ -21,6 +21,11 @@ int main()
 			game_advance(world, rand);
 		});
 
+		tz::window().on_move().add_callback([&world, &rand]([[maybe_unused]] tz::Vec2ui pos)
+		{
+			game_advance(world, rand);
+		});
+
 		while(!tz::window().is_close_requested())
 		{
 			game_advance(world, rand);
@@ -86,7 +91,6 @@ void game_advance(game::World& world, std::default_random_engine& rand)
 		if(tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Middle))
 		{
 			tz::Vec2ui mpos = tz::window().get_mouse_position_state().get_mouse_position();
-			const float aspect_ratio = tz::window().get_width() / tz::window().get_height();
 			tz::Vec2 bpos = mpos;
 			bpos[0] /= tz::window().get_width() * 0.5;
 			bpos[0] -= 1.0f;
