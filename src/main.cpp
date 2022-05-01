@@ -31,10 +31,12 @@ int main()
 
 tz::Vec2 get_mouse_position()
 {
+	const float aspect_ratio = tz::window().get_width() / tz::window().get_height();
 	tz::Vec2ui mpos = tz::window().get_mouse_position_state().get_mouse_position();
 	tz::Vec2 bpos = mpos;
 	bpos[0] /= tz::window().get_width() * 0.5;
 	bpos[0] -= 1.0f;
+	bpos[0] *= aspect_ratio;
 	bpos[1] /= tz::window().get_height() * -0.5f;
 	bpos[1] += 1.0f;
 	return bpos;
