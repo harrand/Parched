@@ -269,20 +269,20 @@ namespace game
 				{
 					if(std::get<BallTypeInfo<BallType::Selective>>(this->motion[i].info).filter(j))
 					{
-						get_pos(j) -= n * 0.4f * delta;
+						get_pos(j) -= n * 0.5f * delta;
 					}
 				}
 				else if(this->get_type(j) == BallType::Selective)
 				{
 					if(std::get<BallTypeInfo<BallType::Selective>>(this->motion[j].info).filter(i))
 					{
-						get_pos(i) += n * 0.4f * delta;
+						get_pos(i) += n * 0.5f * delta;
 					}
 				}
 				else
 				{
-					get_pos(i) += n * 0.4f * delta;
-					get_pos(j) -= n * 0.4f * delta;
+					get_pos(i) += n * 0.5f * delta;
+					get_pos(j) -= n * 0.5f * delta;
 				}
 			}
 		}
@@ -327,27 +327,6 @@ namespace game
 			auto col = static_cast<float>(i) / max;
 			this->set_ball_colour(i, tz::Vec3{col, 0.0f, 1.0f - col});
 		}
-		// Colours by x coord:
-		//std::vector<float> xmins(this->ball_count(), 0.0f);
-		//float xmax = std::numeric_limits<float>::min();
-		//for(std::size_t i = 0; i < this->ball_count(); i++)
-		//{
-		//	const auto& ball = this->render.get_balls()[i];
-		//	xmins[i] = std::abs(ball.position[0] - ball.scale - 0.75f);
-		//	xmax = std::max(xmax, xmins[i]);
-		//}
-
-		//tz_assert(xmax != 0.0f, "Xmax == 0.0f. Boom");
-
-		//for(std::size_t i = 0; i < this->ball_count(); i++)
-		//{
-		//	if(this->get_type(i) != BallType::Normal)
-		//	{
-		//		continue;
-		//	}
-		//	const float col = xmins[i] / xmax;
-		//	this->set_ball_colour(i, {col, 0.0f, 1.0f - col});
-		//}
 #endif // TZ_DEBUG
 	}
 }
