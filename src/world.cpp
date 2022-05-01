@@ -48,6 +48,14 @@ namespace game
 		this->pop_ball();
 	}
 
+	void World::clear()
+	{
+		while(this->ball_count() > 1)
+		{
+			this->pop_ball();
+		}
+	}
+
 	void World::apply_acceleration(std::size_t ball_id, tz::Vec2 acceleration)
 	{
 		tz_assert(this->render.ball_count() > ball_id, "Ball ID %zu is invalid. There are only %zu balls in the world.", ball_id, this->render.ball_count());

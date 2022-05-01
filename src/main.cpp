@@ -78,7 +78,8 @@ void game_advance(game::World& world, std::default_random_engine& rand)
 	game::BallTypeInfo<game::BallType::Selective> not_blue;
 	not_blue.filter = [&world](std::size_t ball_idx)->bool
 	{
-		return world.get_ball_colour(ball_idx)[2] > 0.9f && world.get_type(ball_idx) == game::BallType::Normal;
+		tz::Vec3 col = world.get_ball_colour(ball_idx);
+		return col[0] < 0.3f && col[1] < 0.3f && col[2] > 0.9f && world.get_type(ball_idx) == game::BallType::Normal;
 	};
 
 	if(fixed_update.done())
@@ -103,13 +104,18 @@ void game_advance(game::World& world, std::default_random_engine& rand)
 		{
 			world.add_ball(get_mouse_position(), tz::Vec3{0.2f, 0.2f, 0.2f}, 0.1f, purge_trigger);
 		}
+
+		if(key_down(tz::KeyCode::Escape))
+		{
+			world.clear();
+		}
 		if(key_down(tz::KeyCode::One))
 		{
-			world.add_ball(get_mouse_position(), tz::Vec3{1.0f, 1.0f, 0.0f}, 0.08f, not_blue);
+			world.add_ball(get_mouse_position(), tz::Vec3{1.0f, 1.0f, 0.0f}, 0.02f, not_blue);
 		}
 		if(key_down(tz::KeyCode::Two))
 		{
-			world.add_ball(get_mouse_position(), tz::Vec3{0.0f, 0.0f, 1.0f}, 0.1f, blue_trigger);
+			world.add_ball(get_mouse_position(), tz::Vec3{0.0f, 0.0f, 1.0f}, 0.02f, blue_trigger);
 		}
 	}
 	TZ_FRAME_END;
