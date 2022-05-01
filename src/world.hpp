@@ -30,10 +30,16 @@ namespace game
 		void draw();
 		std::size_t ball_count() const;
 	private:
+		void ball_swap(std::size_t i, std::size_t j);
+		void swap_last(std::size_t ball_id);
 		void motion_integration(float dt);
 		void solve_physics();
 		void apply_constraint();
+		bool sweep(std::size_t i, std::size_t j, std::span<const BallState> balls);
 		void solve_collisions();
+		void solve_collision(std::size_t i, std::size_t j);
+		void sort();
+		void debug_colour_by_id();
 
 		RenderState render;
 		std::vector<MotionData> motion;

@@ -21,10 +21,10 @@ int main()
 			game_advance(world, rand);
 		});
 
-		tz::window().on_move().add_callback([&world, &rand]([[maybe_unused]] tz::Vec2ui pos)
-		{
-			game_advance(world, rand);
-		});
+		//tz::window().on_move().add_callback([&world, &rand]([[maybe_unused]] tz::Vec2ui pos)
+		//{
+		//	game_advance(world, rand);
+		//});
 
 		while(!tz::window().is_close_requested())
 		{
