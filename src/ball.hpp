@@ -22,8 +22,8 @@ namespace game
 	struct BallTypeInfo<BallType::Trigger>
 	{
 		constexpr BallType get_type() const{return BallType::Trigger;}
-		tz::Callback<std::size_t> on_enter;
-		tz::Callback<std::size_t> on_exit;
+		tz::Callback<std::size_t, std::size_t> on_enter;
+		tz::Callback<std::size_t, std::size_t> on_exit;
 	};
 
 	template<>

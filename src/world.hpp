@@ -27,6 +27,10 @@ namespace game
 		const tz::Vec3& get_ball_colour(std::size_t ball_id) const;
 		void set_ball_colour(std::size_t ball_id, tz::Vec3 colour);
 		BallType get_type(std::size_t ball_id) const;
+
+		BallState& get_state(std::size_t ball_id);
+		MotionData& get_motion(std::size_t ball_id);
+
 		void update();
 		void draw();
 		std::size_t ball_count() const;

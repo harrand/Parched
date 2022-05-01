@@ -61,13 +61,14 @@ void game_advance(game::World& world, std::default_random_engine& rand)
 	world.draw();
 
 	game::BallTypeInfo<game::BallType::Trigger> blue_trigger;
-	blue_trigger.on_enter.add_callback([&world](std::size_t ball_idx)
+	blue_trigger.on_enter.add_callback([&world](std::size_t me, std::size_t ball_idx)
 	{
 		world.set_ball_colour(ball_idx, tz::Vec3{0.0f, 0.0f, 1.0f});
+		world.get_motion(ball_idx).acceleration[0] = 100.0f;
 	});
 
 	game::BallTypeInfo<game::BallType::Trigger> purge_trigger;
-	purge_trigger.on_enter.add_callback([&world](std::size_t ball_idx)
+	purge_trigger.on_enter.add_callback([&world](std::size_t me, std::size_t ball_idx)
 	{
 		if(world.get_type(ball_idx) == game::BallType::Normal)
 		{

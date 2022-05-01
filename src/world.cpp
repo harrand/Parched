@@ -82,6 +82,16 @@ namespace game
 		return t;
 	}
 
+	BallState& World::get_state(std::size_t ball_idx)
+	{
+		return this->render.get_balls()[ball_idx];
+	}
+
+	MotionData& World::get_motion(std::size_t ball_idx)
+	{
+		return this->motion[ball_idx];
+	}
+
 	void World::update()
 	{
 		TZ_PROFZONE("World Update", TZ_PROFCOL_GREEN);
@@ -261,11 +271,11 @@ namespace game
 		{
 			if(this->get_type(i) == BallType::Trigger)
 			{
-				std::get<BallTypeInfo<BallType::Trigger>>(this->motion[i].info).on_enter(j);
+				std::get<BallTypeInfo<BallType::Trigger>>(this->motion[i].info).on_enter(i, j);
 			}
 			else if(this->get_type(j) == BallType::Trigger)
 			{
-				std::get<BallTypeInfo<BallType::Trigger>>(this->motion[j].info).on_enter(i);
+				std::get<BallTypeInfo<BallType::Trigger>>(this->motion[j].info).on_enter(j, i);
 			}
 			else
 			{
