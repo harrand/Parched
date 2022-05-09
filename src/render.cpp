@@ -70,6 +70,16 @@ namespace game
 		std::swap(this->get_balls()[a], this->get_balls()[b]);
 	}
 
+	tz::gl::IComponent* RenderState::get_ball_component()
+	{
+		return this->renderer.get_component(this->ball_data);
+	}
+
+	tz::gl::Device& RenderState::get_device()
+	{
+		return this->device;
+	}
+
 	tz::gl::Renderer RenderState::make_renderer()
 	{
 		tz::gl::RendererInfo rinfo;

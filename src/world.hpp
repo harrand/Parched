@@ -11,8 +11,11 @@ namespace game
 	{
 		std::size_t ball_id;
 		tz::Vec2 position_old = {0.0f, 0.0f};
+		float pad0[2];
 		tz::Vec2 acceleration = {0.0f, 0.0f};
+		float pad1[2];
 		BallInfo info;
+		float pad2[3];
 	};
 
 	class World
@@ -35,6 +38,8 @@ namespace game
 		void draw();
 		std::size_t ball_count() const;
 	private:
+		tz::gl::Renderer make_renderer();
+
 		void ball_swap(std::size_t i, std::size_t j);
 		void swap_last(std::size_t ball_id);
 		void motion_integration(float dt);
@@ -49,6 +54,9 @@ namespace game
 		RenderState render;
 		std::vector<MotionData> motion;
 		tz::Duration time;
+		tz::gl::ResourceHandle ball_reference;
+		tz::gl::ResourceHandle motion_handle;
+		tz::gl::Renderer physics_compute;
 	};
 }
 

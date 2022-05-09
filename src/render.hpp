@@ -38,6 +38,8 @@ namespace game
 		void add_ball(tz::Vec2 position, tz::Vec3 colour, float radius = 1.0);
 		void pop_ball();
 		void swap_balls(std::size_t a, std::size_t b);
+		tz::gl::IComponent* get_ball_component();
+		tz::gl::Device& get_device();
 	private:
 		tz::gl::Renderer make_renderer();
 

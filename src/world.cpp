@@ -1,13 +1,19 @@
 #include "world.hpp"
 #include "core/profiling/zone.hpp"
+#include "gl/imported_shaders.hpp"
+#include "gl/resource.hpp"
 #include <numeric>
+#include ImportedShaderHeader(parched_physics, compute)
 
 namespace game
 {
 	World::World():
 	render(),
 	motion(),
-	time(tz::system_time())
+	time(tz::system_time()),
+	ball_reference(tz::nullhand),
+	motion_handle(tz::nullhand),
+	physics_compute(this->make_renderer())
 	{
 		// Main circle to indicate playing space.
 		this->add_ball({0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, 0.95f, BallTypeInfo<BallType::Constraint>{});
@@ -120,6 +126,21 @@ namespace game
 		return this->render.ball_count();
 	}
 
+	tz::gl::Renderer World::make_renderer()
+	{
+		std::vector<MotionData> temp;
+		temp.resize(this->render.ball_capacity());
+
+		tz::gl::BufferResource motion_buffer_resource = tz::gl::BufferResource::from_many(temp, tz::gl::ResourceAccess::DynamicVariable);
+		tz::gl::RendererInfo cinfo;
+		cinfo.shader().set_shader(tz::gl::ShaderStage::Compute, ImportedShaderSource(parched_physics, compute));
+		cinfo.set_options({tz::gl::RendererOption::BlockingCompute});
+		this->ball_reference = cinfo.add_component(*this->render.get_ball_component());
+		this->motion_handle = cinfo.add_resource(motion_buffer_resource);
+		cinfo.set_compute_kernel({static_cast<unsigned int>(this->render.ball_capacity() / 64u), 1u, 1u});
+		return this->render.get_device().create_renderer(cinfo);
+	}
+
 	void World::ball_swap(std::size_t i, std::size_t j)
 	{
 		TZ_PROFZONE("World Ball Swap", TZ_PROFCOL_GREEN);
@@ -160,17 +181,18 @@ namespace game
 	void World::solve_physics()
 	{
 		TZ_PROFZONE("World Solve Physics", TZ_PROFCOL_GREEN);
-		constexpr tz::Vec2 gravity{0.0f, -3.0f};
-		for(std::size_t i = 0; i < this->render.ball_count(); i++)
-		{
-			if(this->get_type(i) != BallType::Normal)
-			{
-				continue;
-			}
-			this->apply_acceleration(i, gravity);
-		}
-		this->apply_constraint();
-		this->solve_collisions();
+		this->physics_compute.render();
+		//constexpr tz::Vec2 gravity{0.0f, -3.0f};
+		//for(std::size_t i = 0; i < this->render.ball_count(); i++)
+		//{
+		//	if(this->get_type(i) != BallType::Normal)
+		//	{
+		//		continue;
+		//	}
+		//	this->apply_acceleration(i, gravity);
+		//}
+		//this->apply_constraint();
+		//this->solve_collisions();
 	}
 
 	void World::apply_constraint()

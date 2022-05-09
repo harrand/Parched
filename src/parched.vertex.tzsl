@@ -15,12 +15,12 @@ struct BallData
 	bool is_active;
 };
 
-resource(id = 0) buffer BallBuffer
+resource(id = 0) const buffer BallBuffer
 {
 	BallData data[];
 } balls;
 
-resource(id = 1) buffer Meta
+resource(id = 1) const buffer Meta
 {
 	float aspect_ratio;
 } metadata;

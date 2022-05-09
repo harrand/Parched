@@ -1,0 +1,41 @@
+shader(type = compute);
+kernel(64, 1, 1);
+
+const uint BallType::Normal = 0;
+const uint BallType::Constraint = 1;
+const uint BallType::Trigger = 2;
+const uint BallType::Selective = 3;
+
+struct BallData
+{
+	vec2 position;
+	vec3 colour;
+	float scale;
+	bool is_active;
+};
+
+struct MotionData
+{
+	uint ball_id;
+	vec2 position_old;
+	vec2 acceleration;
+};
+
+resource(id = 0) buffer BallBufferReference
+{
+	BallData data[];
+} balls;
+
+resource(id = 1) buffer BallMotion
+{
+	MotionData data[];
+} motion;
+
+void main()
+{
+	uint id = in::global_id.x;
+	if(id != 0)
+	{
+		balls.data[id].position.y -= 0.0001f;
+	}
+}

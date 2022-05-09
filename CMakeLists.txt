@@ -12,4 +12,5 @@ add_app(
 	SHADER_SOURCES
 		src/parched.vertex.tzsl
 		src/parched.fragment.tzsl
+		src/parched_physics.compute.tzsl
 )
