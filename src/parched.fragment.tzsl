@@ -8,6 +8,8 @@ input(id = 2) float scale;
 input(id = 3) vec2 position_clipspace;
 output(id = 0) vec4 out_colour;
 
+const float outline_length = 0.01f;
+
 resource(id = 1) buffer Meta
 {
 	float aspect_ratio;
@@ -22,5 +24,12 @@ void main()
 	{
 		discard;
 	}
-	out_colour = vec4(colour, 1.0);
+	if(scale.x - dist < outline_length)
+	{
+		out_colour = vec4(1.0, 1.0, 1.0, 1.0);
+	}
+	else
+	{
+		out_colour = vec4(colour, 1.0);
+	}
 }

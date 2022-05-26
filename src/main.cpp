@@ -64,7 +64,7 @@ void game_advance(game::World& world, std::default_random_engine& rand)
 	blue_trigger.on_enter.add_callback([&world](std::size_t me, std::size_t ball_idx)
 	{
 		world.set_ball_colour(ball_idx, tz::Vec3{0.0f, 0.0f, 1.0f});
-		world.get_motion(ball_idx).acceleration[0] = 100.0f;
+		world.get_motion(ball_idx).acceleration[1] = 100.0f;
 	});
 
 	game::BallTypeInfo<game::BallType::Trigger> purge_trigger;
